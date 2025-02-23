@@ -3,6 +3,7 @@ import { Pencil, Trash2 } from "lucide-react";
 
 interface DiaryEntryProps {
   id: number;
+  title: string;
   date: string;
   content: string;
   onEdit: (id: number) => void;
@@ -11,6 +12,7 @@ interface DiaryEntryProps {
 
 export function DiaryEntry({
   id,
+  title,
   date,
   content,
   onEdit,
@@ -19,14 +21,7 @@ export function DiaryEntry({
   return (
     <div className="bg-white shadow rounded-lg p-4">
       <div className="font-semibold mb-2 flex justify-between items-center">
-        <span>
-          {new Date(date).toLocaleDateString("ja-JP", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            weekday: "long",
-          })}
-        </span>
+        <span>{title}</span>
         <div>
           <Button
             variant="ghost"
@@ -42,6 +37,14 @@ export function DiaryEntry({
             <span className="sr-only">削除</span>
           </Button>
         </div>
+      </div>
+      <div className="text-sm text-gray-500 mb-2">
+        {new Date(date).toLocaleDateString("ja-JP", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        })}
       </div>
       <p className="text-gray-700 whitespace-pre-wrap">{content}</p>
     </div>
