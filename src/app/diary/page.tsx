@@ -42,7 +42,6 @@ export default function Home() {
   const [deletingEntryId, setDeletingEntryId] = useState<number | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-<<<<<<< HEAD
   const addEntry = async (date: string, content: string) => {
     const response = await fetch("/api/diary", {
       method: "POST",
@@ -58,16 +57,6 @@ export default function Home() {
     } else {
       console.error("Failed to add entry");
     }
-=======
-  const addEntry = (title: string, date: string, content: string) => {
-    const newEntry = {
-      id: entries.length > 0 ? Math.max(...entries.map((e) => e.id)) + 1 : 1,
-      title,
-      date,
-      content,
-    };
-    setEntries([newEntry, ...entries]);
->>>>>>> db159df1b27702ef3e020df3eb31841cf759ed92
   };
 
   const editEntry = (id: number) => {
