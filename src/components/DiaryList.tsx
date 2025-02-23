@@ -18,7 +18,11 @@ export function DiaryList({ entries, onEdit, onDelete }: DiaryListProps) {
         <div className="space-y-4">
           {entries.map((entry) => (
             <DiaryEntry
+<<<<<<< Updated upstream
               key={entry.id}
+=======
+              key={`diary-${entry.id}`} // ここでkeyプロパティを設定
+>>>>>>> Stashed changes
               id={entry.id}
               title={entry.title}
               date={entry.date}
