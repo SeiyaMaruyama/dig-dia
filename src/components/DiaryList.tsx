@@ -1,7 +1,7 @@
 import { DiaryEntry } from "./DiaryEntry";
 
 interface DiaryListProps {
-  entries: { id: number; date: string; content: string }[];
+  entries: { id: number; title: string; date: string; content: string }[];
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
 }
@@ -20,6 +20,7 @@ export function DiaryList({ entries, onEdit, onDelete }: DiaryListProps) {
             <DiaryEntry
               key={entry.id}
               id={entry.id}
+              title={entry.title}
               date={entry.date}
               content={entry.content}
               onEdit={onEdit}
