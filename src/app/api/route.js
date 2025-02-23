@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST() {
+  const today = new Date().toISOString().split("T")[0];
   return NextResponse.json({
-    message: "データを取得!",
+    message: "日記を作成しました!",
+    date: today,
   });
 }
