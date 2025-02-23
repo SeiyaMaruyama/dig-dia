@@ -33,13 +33,21 @@ export default function Home() {
     content: string;
   } | null>(null);
 
-  const addEntry = (date: string, content: string) => {
-    const newEntry = {
-      id: entries.length > 0 ? Math.max(...entries.map((e) => e.id)) + 1 : 1,
-      date,
-      content,
-    };
-    setEntries([newEntry, ...entries]);
+  const addEntry = async (date: string, content: string) => {
+    const response = await fetch("/api/diary", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ date, content }),
+    });
+
+    if (response.ok) {
+      const newEntry = await response.json();
+      setEntries([newEntry, ...entries]);
+    } else {
+      console.error("Failed to add entry");
+    }
   };
 
   const editEntry = (id: number) => {
