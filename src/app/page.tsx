@@ -1,101 +1,153 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link"; // 追加
+import { useState } from "react";
+import { DiaryForm } from "../components/DiaryForm";
+import { DiaryList } from "../components/DiaryList";
+import { EditModal } from "../components/EditModal";
+import { DeleteConfirmModal } from "../components/DeleteConfirmModal";
+
+const initialEntries = [
+  {
+    id: 1,
+    title: "発表資料作り",
+    date: "2025-02-23",
+    content:
+      "ハッカソン用の発表資料を作成した。スライドの内容と流れについて注意を払った。",
+  },
+  {
+    id: 2,
+    title: "GitHubでプルリクを作ってみた",
+    date: "2025-02-22",
+    content:
+      "GitHubでプルリクを作成してみた。作成の過程や他のメンバーとのコミュニケーションについても学んだ。",
+  },
+  {
+    id: 3,
+    title: "apiを叩いてみた",
+    date: "2025-02-21",
+    content:
+      "初めてapiを叩いてみた。データを取得することができ、とても面白かった。",
+  },
+  {
+    id: 4,
+    title: "企画をした",
+    date: "2025-02-20",
+    content:
+      "ハッカソンの企画をした。メンバーとアイデアを出し合い、どのように進めていくかを話し合って最後には作業分担した。",
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [entries, setEntries] = useState(initialEntries);
+  const [editingEntry, setEditingEntry] = useState<{
+    id: number;
+    title: string;
+    date: string;
+    content: string;
+  } | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deletingEntryId, setDeletingEntryId] = useState<number | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const addEntry = (title: string, date: string, content: string) => {
+    const newEntry = {
+      id: entries.length > 0 ? Math.max(...entries.map((e) => e.id)) + 1 : 1,
+      title,
+      date,
+      content,
+    };
+    setEntries([newEntry, ...entries]);
+  };
+
+  const editEntry = (id: number) => {
+    const entryToEdit = entries.find((entry) => entry.id === id);
+    if (entryToEdit) {
+      setEditingEntry(entryToEdit);
+      setIsEditModalOpen(true);
+    }
+  };
+
+  const updateEntry = (
+    id: number,
+    title: string,
+    date: string,
+    content: string
+  ) => {
+    setEntries(
+      entries.map((entry) =>
+        entry.id === id ? { ...entry, title, date, content } : entry
+      )
+    );
+    setEditingEntry(null);
+    setIsEditModalOpen(false);
+  };
+
+  const deleteEntry = (id: number) => {
+    setDeletingEntryId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (deletingEntryId !== null) {
+      setEntries(entries.filter((entry) => entry.id !== deletingEntryId));
+      setDeletingEntryId(null);
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <header className="bg-gray-100 border-b border-gray-300">
+        <nav className="container mx-auto p-4 max-w-3xl flex space-x-4">
+          <Link
+            href="/diary"
+            className="text-black-800 font-bold hover:underline"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            発掘日記
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            目標一覧
+          </Link>
+          <Link
+            href="/task"
+            className="text-black-800 font-bold hover:underline"
+          >
+            タスク一覧
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
+          >
+            ギャラリー
+          </Link>
+        </nav>
+      </header>
+      <div className="bg-[#f5e7d6]">
+        <main className="container mx-auto p-4">
+          <h1 className="text-3xl font-bold mb-6 text-center">発掘日記</h1>
+          <DiaryForm onAddEntry={addEntry} />
+          <DiaryList
+            entries={entries}
+            onEdit={editEntry}
+            onDelete={deleteEntry}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <EditModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            entry={editingEntry}
+            onUpdate={updateEntry}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+          <DeleteConfirmModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={confirmDelete}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </main>
+      </div>
+    </>
   );
 }
