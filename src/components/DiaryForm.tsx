@@ -35,14 +35,14 @@ export function DiaryForm({ onAddEntry }: DiaryFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 space-y-4">
+    <form onSubmit={handleSubmit} className="mb-6 space-y-4 max-w-lg mx-auto">
       <div>
         <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="タイトル"
-          className="w-full"
+          className="w-full bg-white"
           required
         />
       </div>
@@ -51,7 +51,7 @@ export function DiaryForm({ onAddEntry }: DiaryFormProps) {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="w-full"
+          className="w-full bg-white"
           required
         />
       </div>
@@ -59,8 +59,8 @@ export function DiaryForm({ onAddEntry }: DiaryFormProps) {
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="今日の出来事を書いてください..."
-          className="w-full"
+          placeholder="今日の「できた！」 「やってみた！」を日記にしよう ^^b"
+          className="w-full bg-white h-40"
           required
         />
       </div>

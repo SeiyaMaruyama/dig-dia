@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link"; // 追加
 import { useState } from "react";
 import { DiaryForm } from "../../components/DiaryForm";
 import { DiaryList } from "../../components/DiaryList";
@@ -9,24 +10,31 @@ import { DeleteConfirmModal } from "../../components/DeleteConfirmModal";
 const initialEntries = [
   {
     id: 1,
-    title: "友達との再会",
-    date: "2025-02-22",
+    title: "発表資料作り",
+    date: "2025-02-23",
     content:
-      "今日は友達と久しぶりに会って、カフェでゆっくり過ごしました。昔話に花が咲いて、あっという間に時間が過ぎてしまいました。やはり人と直接会って話すのは大切だなと実感しました。",
+      "ハッカソン用の発表資料を作成した。スライドの内容と流れについて注意を払った。",
   },
   {
     id: 2,
-    title: "新しい趣味",
-    date: "2025-02-21",
+    title: "GitHubでプルリクを作ってみた",
+    date: "2025-02-22",
     content:
-      "新しい趣味として水彩画を始めてみました。最初は難しかったですが、YouTubeの tutorial を見ながら練習していると少しずつ上達している気がします。自分の成長を感じられるのが楽しいです。",
+      "GitHubでプルリクを作成してみた。作成の過程や他のメンバーとのコミュニケーションについても学んだ。",
   },
   {
     id: 3,
-    title: "朝のジョギング",
+    title: "apiを叩いてみた",
+    date: "2025-02-21",
+    content:
+      "初めてapiを叩いてみた。データを取得することができ、とても面白かった。",
+  },
+  {
+    id: 4,
+    title: "企画をした",
     date: "2025-02-20",
     content:
-      "今日は早起きして、近所の公園でジョギングをしました。朝の空気が気持ち良くて、すがすがしい気分になりました。これからも続けていきたいと思います。健康的な生活習慣を作るのが目標です。",
+      "ハッカソンの企画をした。メンバーとアイデアを出し合い、どのように進めていくかを話し合って最後には作業分担した。",
   },
 ];
 
@@ -89,21 +97,57 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto p-4 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">日記</h1>
-      <DiaryForm onAddEntry={addEntry} />
-      <DiaryList entries={entries} onEdit={editEntry} onDelete={deleteEntry} />
-      <EditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        entry={editingEntry}
-        onUpdate={updateEntry}
-      />
-      <DeleteConfirmModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDelete}
-      />
-    </main>
+    <>
+      <header className="bg-gray-100 border-b border-gray-300">
+        <nav className="container mx-auto p-4 max-w-3xl flex space-x-4">
+          <Link
+            href="/diary"
+            className="text-black-800 font-bold hover:underline"
+          >
+            発掘日記
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
+          >
+            目標一覧
+          </Link>
+          <Link
+            href="/task"
+            className="text-black-800 font-bold hover:underline"
+          >
+            タスク一覧
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
+          >
+            ギャラリー
+          </Link>
+        </nav>
+      </header>
+      <div className="bg-[#f5e7d6]">
+        <main className="container mx-auto p-4">
+          <h1 className="text-3xl font-bold mb-6 text-center">発掘日記</h1>
+          <DiaryForm onAddEntry={addEntry} />
+          <DiaryList
+            entries={entries}
+            onEdit={editEntry}
+            onDelete={deleteEntry}
+          />
+          <EditModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            entry={editingEntry}
+            onUpdate={updateEntry}
+          />
+          <DeleteConfirmModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={confirmDelete}
+          />
+        </main>
+      </div>
+    </>
   );
 }

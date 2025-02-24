@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
+import Link from "next/link"; // 追加
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +43,7 @@ const TaskCard = ({
   onEdit: (task: Task) => void;
   onDelete: (id: number) => void;
 }) => (
-  <Card className="w-full max-w-sm">
+  <Card className="w-full max-w-sm bg-white">
     <CardHeader>
       <CardTitle>{task.title}</CardTitle>
     </CardHeader>
@@ -237,90 +238,122 @@ export default function TaskManagement() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">タスク管理</h1>
-      <Dialog
-        open={isDialogOpen}
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          if (!open) setEditingTask(undefined);
-        }}
-      >
-        <div className="flex justify-end mb-4">
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> 新規タスク
-            </Button>
-          </DialogTrigger>
-        </div>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {editingTask ? "タスクの編集" : "新規タスク"}
-            </DialogTitle>
-          </DialogHeader>
-          <TaskForm
-            task={editingTask}
-            onSave={handleSaveTask}
-            onCancel={() => {
-              setIsDialogOpen(false);
-              setEditingTask(undefined);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
-
-      {/* 削除確認用のモーダル */}
-      <Dialog
-        open={deleteDialogOpen}
-        onOpenChange={(open) => {
-          setDeleteDialogOpen(open);
-          if (!open) setTaskToDelete(undefined);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>タスクの削除</DialogTitle>
-          </DialogHeader>
-          <p className="mb-4">タスクを削除してもよろしいですか？</p>
-          <div className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                setDeleteDialogOpen(false);
-                setTaskToDelete(undefined);
+    <>
+      <header className="bg-gray-100 border-b border-gray-300">
+        <nav className="container mx-auto p-4 max-w-3xl flex space-x-4">
+          <Link
+            href="/diary"
+            className="text-black-800 font-bold hover:underline"
+          >
+            発掘日記
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
+          >
+            目標一覧
+          </Link>
+          <Link
+            href="/task"
+            className="text-black-800 font-bold hover:underline"
+          >
+            タスク一覧
+          </Link>
+          <Link
+            href="/dig"
+            className="text-black-800 font-bold hover:underline"
+          >
+            ギャラリー
+          </Link>
+        </nav>
+      </header>
+      <div className="min-h-screen bg-[#f5e7d6] p-4">
+        <h1 className="text-2xl font-bold mb-4 text-center">タスク管理</h1>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) setEditingTask(undefined);
+          }}
+        >
+          <div className="flex justify-end mb-4">
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" /> 新規タスク
+              </Button>
+            </DialogTrigger>
+          </div>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {editingTask ? "タスクの編集" : "新規タスク"}
+              </DialogTitle>
+            </DialogHeader>
+            <TaskForm
+              task={editingTask}
+              onSave={handleSaveTask}
+              onCancel={() => {
+                setIsDialogOpen(false);
+                setEditingTask(undefined);
               }}
-            >
-              キャンセル
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={() => {
-                if (taskToDelete) {
-                  setTasks(tasks.filter((task) => task.id !== taskToDelete.id));
+            />
+          </DialogContent>
+        </Dialog>
+
+        {/* 削除確認用のモーダル */}
+        <Dialog
+          open={deleteDialogOpen}
+          onOpenChange={(open) => {
+            setDeleteDialogOpen(open);
+            if (!open) setTaskToDelete(undefined);
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>タスクの削除</DialogTitle>
+            </DialogHeader>
+            <p className="mb-4">タスクを削除してもよろしいですか？</p>
+            <div className="flex justify-end space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
                   setDeleteDialogOpen(false);
                   setTaskToDelete(undefined);
-                }
-              }}
-            >
-              削除
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+                }}
+              >
+                キャンセル
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => {
+                  if (taskToDelete) {
+                    setTasks(
+                      tasks.filter((task) => task.id !== taskToDelete.id)
+                    );
+                    setDeleteDialogOpen(false);
+                    setTaskToDelete(undefined);
+                  }
+                }}
+              >
+                削除
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onEdit={handleEditTask}
-            onDelete={confirmDeleteTask}
-          />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              onEdit={handleEditTask}
+              onDelete={confirmDeleteTask}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

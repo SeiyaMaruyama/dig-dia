@@ -7,7 +7,7 @@ interface DiaryListProps {
 
 export function DiaryList({ entries, onEdit, onDelete }: DiaryListProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">日記一覧</h2>
       {entries.length === 0 ? (
         <p className="text-gray-500">

@@ -30,18 +30,18 @@ const Summary = ({ text }: { text: string }) => {
   };
 
   return (
-    <div className="mt-4 p-4 border rounded-lg shadow-md bg-gray-100">
+    <div className="mt-4 p-4 text-right">
       <button
         onClick={handleSummarize}
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
         disabled={loading}
       >
-        {loading ? "要約中..." : "要約する"}
+        {loading ? "振り返りをまとめ中..." : "振り返る！"}
       </button>
 
       {summary && (
         <div className="mt-4 p-3 border bg-white rounded">
-          <h2 className="text-lg font-semibold">要約:</h2>
+          <h2 className="text-lg font-semibold">まとめ:</h2>
           <p className="mt-2">{summary}</p>
         </div>
       )}
