@@ -18,7 +18,7 @@ export function DiaryList({ entries, onEdit, onDelete }: DiaryListProps) {
         <div className="space-y-4">
           {entries.map((entry) => (
             <DiaryEntry
-              key={entry.id}
+              key={`diary-${entry.id}`}
               id={entry.id}
               title={entry.title}
               date={entry.date}
