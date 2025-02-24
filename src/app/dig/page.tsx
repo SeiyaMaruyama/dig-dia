@@ -57,7 +57,10 @@ export default function Dig() {
   
     if (currentGoal) {
       // 編集 (PUT)
-      await fetch(`/api/digapi/${currentGoal.id}`, {
+      const url = new URL(`/api/digapi`, window.location.origin);
+      url.searchParams.append('id', String(currentGoal.id)); // idをクエリパラメータとして追加
+
+      await fetch(url.toString(), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),

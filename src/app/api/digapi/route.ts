@@ -33,7 +33,14 @@ export async function POST(req: Request) {
 
 // PUT: 目標を更新
 export async function PUT(req: Request) {
-  const { id, title, description } = await req.json();
+  const url = new URL(req.url);
+  const id = Number(url.searchParams.get("id"));  // クエリパラメータからidを取得
+  const { title, description } = await req.json();
+
+  if (typeof id !== "number") {
+    return NextResponse.json({ error: "IDが無効です" }, { status: 400 });
+  }
+
   const goalIndex = goals.findIndex((g) => g.id === id);
 
   if (goalIndex === -1) {
