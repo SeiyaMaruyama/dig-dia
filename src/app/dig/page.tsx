@@ -134,7 +134,9 @@ export default function Dig() {
         </header>
         <div className="container mx-auto p-4">
           <div className="relative mb-4">
-            <h1 className="text-2xl font-bold text-center">“できる”を発掘</h1>
+            <h1 className="text-2xl font-bold text-center">
+              目標一覧 ～“できる”を発掘！～
+            </h1>
             <div className="absolute right-0 top-0">
               <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
@@ -209,6 +211,13 @@ export default function Dig() {
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => openDeleteDialog(goal)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                         {goal.taskCompletionRate === 100 && (
                           <Link href="/summary">
                             <Button
@@ -220,13 +229,6 @@ export default function Dig() {
                             </Button>
                           </Link>
                         )}
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => openDeleteDialog(goal)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>

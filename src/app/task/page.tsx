@@ -178,21 +178,21 @@ export default function TaskManagement() {
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: 1,
-      title: "プロジェクト計画の作成",
-      description: "来月のプロジェクトの詳細計画を立てる",
-      tags: ["仕事", "計画"],
+      title: "発表資料作り",
+      description: "Googleスライドで発表資料を作成する",
+      tags: ["技育Campハッカソンで作品発表"],
     },
     {
       id: 2,
-      title: "週次レポートの提出",
-      description: "先週の進捗状況をまとめてレポートを作成する",
-      tags: ["仕事", "レポート"],
+      title: "GitHubの勉強",
+      description: "pullの仕組みを調べる。",
+      tags: ["GitHubの基礎を学ぶ"],
     },
     {
       id: 3,
-      title: "新しい技術の学習",
+      title: "Reactの学習",
       description: "React Hooksについて1時間学習する",
-      tags: ["自己啓発", "プログラミング"],
+      tags: ["Reactの基礎を学ぶ"],
     },
   ]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -268,7 +268,7 @@ export default function TaskManagement() {
         </nav>
       </header>
       <div className="min-h-screen bg-[#f5e7d6] p-4">
-        <h1 className="text-2xl font-bold mb-4 text-center">タスク管理</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">タスク一覧</h1>
         <Dialog
           open={isDialogOpen}
           onOpenChange={(open) => {
