@@ -1,5 +1,4 @@
 import { DiaryEntry } from "./DiaryEntry";
-
 interface DiaryListProps {
   entries: { id: number; title: string; date: string; content: string }[];
   onEdit: (id: number) => void;
@@ -18,11 +17,8 @@ export function DiaryList({ entries, onEdit, onDelete }: DiaryListProps) {
         <div className="space-y-4">
           {entries.map((entry) => (
             <DiaryEntry
-<<<<<<< Updated upstream
               key={entry.id}
-=======
-              key={`diary-${entry.id}`} // ここでkeyプロパティを設定
->>>>>>> Stashed changes
+              //key={`diary-${entry.id}`}
               id={entry.id}
               title={entry.title}
               date={entry.date}
