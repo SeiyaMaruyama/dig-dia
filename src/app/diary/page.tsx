@@ -114,14 +114,3 @@ export default function Home() {
     </main>
   );
 }
-
-import React from "react";
-
-export default function DiaryPage() {
-  return (
-    <div>
-      <h1>日記ページ</h1>
-      <p>ここに日記の内容が表示されます。</p>
-    </div>
-  );
-}
