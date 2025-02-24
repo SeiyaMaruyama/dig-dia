@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,20 +32,7 @@ type Goal = {
 };
 
 export default function Dig() {
-  const [goals, setGoals] = useState<Goal[]>([
-    {
-      id: 1,
-      title: "React習得",
-      description: "Reactの基礎をマスターする",
-      taskCompletionRate: 75,
-    },
-    {
-      id: 2,
-      title: "ポートフォリオ作成",
-      description: "個人ウェブサイトを作る",
-      taskCompletionRate: 30,
-    },
-  ]);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [currentGoal, setCurrentGoal] = useState<Goal | null>(null);
 
@@ -53,36 +40,67 @@ export default function Dig() {
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<Goal | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   // 目標一覧の取得（GETリクエスト）
+   useEffect(() => {
+    fetch("/api/digapi")
+      .then((res) => res.json())
+      .then((data) => setGoals(data));
+    }, []);
+
+  // 更新新規作成
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
-
+  
     if (currentGoal) {
-      updateGoal(currentGoal.id, { title, description });
+      // 編集 (PUT)
+      const url = new URL("/api/digapi", window.location.origin);
+      url.searchParams.append('id', String(currentGoal.id)); // idをクエリパラメータとして追加
+
+      await fetch(url.toString(), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description }),
+      });
     } else {
-      addGoal({ title, description });
+      // 新規作成 (POST)
+      await fetch("/api/digapi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description }),
+      });
     }
+
+    // データを再取得
+    fetch("/api/digapi")
+      .then((res) => res.json())
+      .then((data) => setGoals(data));
+
+    // ダイアログを閉じる
     setIsOpen(false);
     setCurrentGoal(null);
   };
 
-  const addGoal = (newGoal: Omit<Goal, "id" | "taskCompletionRate">) => {
-    const id = Math.max(0, ...goals.map((g) => g.id)) + 1;
-    setGoals([...goals, { ...newGoal, id, taskCompletionRate: 0 }]);
-  };
-
-  const updateGoal = (id: number, updatedGoal: Partial<Goal>) => {
-    setGoals(
-      goals.map((goal) => (goal.id === id ? { ...goal, ...updatedGoal } : goal))
-    );
-  };
-
-  const deleteGoal = (id: number) => {
-    setGoals(goals.filter((goal) => goal.id !== id));
-  };
+    // 削除処理
+    const handleDelete = async () => {
+      if (!goalToDelete) return;
+      const url = new URL("/api/digapi", window.location.origin);
+      url.searchParams.append('id', String(goalToDelete.id));
+      await fetch(url.toString(), {
+        method: 'DELETE',
+      });
+  
+      // データを再取得
+      fetch("/api/digapi")
+        .then((res) => res.json())
+        .then((data) => setGoals(data));
+  
+      setDeleteDialogIsOpen(false);
+      setGoalToDelete(null);
+    };
 
   const openDeleteDialog = (goal: Goal) => {
     setGoalToDelete(goal);
@@ -202,13 +220,7 @@ export default function Dig() {
             </Button>
             <Button
               variant="destructive"
-              onClick={() => {
-                if (goalToDelete) {
-                  deleteGoal(goalToDelete.id);
-                }
-                setDeleteDialogIsOpen(false);
-                setGoalToDelete(null);
-              }}
+              onClick={handleDelete}
             >
               削除
             </Button>
