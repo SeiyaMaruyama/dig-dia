@@ -8,7 +8,7 @@ type Goal = {
 };
 
 // 仮のデータストア（本来はデータベースを使う）
-let goals: Goal[] = [
+const goals: Goal[] = [
   { id: 1, title: "React習得", description: "Reactの基礎をマスターする", taskCompletionRate: 75 },
   { id: 2, title: "ポートフォリオ作成", description: "個人ウェブサイトを作る", taskCompletionRate: 30 },
 ];
@@ -53,13 +53,14 @@ export async function PUT(req: Request) {
 
 // DELETE: 目標を削除
 export async function DELETE(req: Request) {
-  const { id } = await req.json();
+  const url = new URL(req.url);
+  const id = Number(url.searchParams.get("id"));
   const goalIndex = goals.findIndex((g) => g.id === id);
 
   if (goalIndex === -1) {
     return NextResponse.json({ error: "目標が見つかりません" }, { status: 404 });
   }
 
-  goals = goals.filter((g) => g.id !== id);
+  goals.splice(goalIndex, 1);
   return NextResponse.json({ message: "削除成功" }, { status: 200 });
 }

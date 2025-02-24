@@ -57,7 +57,7 @@ export default function Dig() {
   
     if (currentGoal) {
       // 編集 (PUT)
-      const url = new URL(`/api/digapi`, window.location.origin);
+      const url = new URL("/api/digapi", window.location.origin);
       url.searchParams.append('id', String(currentGoal.id)); // idをクエリパラメータとして追加
 
       await fetch(url.toString(), {
@@ -85,21 +85,22 @@ export default function Dig() {
   };
 
     // 削除処理
-    /*const handleDelete = async () => {
+    const handleDelete = async () => {
       if (!goalToDelete) return;
-      
-      await fetch(`/api/goals/${goalToDelete.id}`, {
-        method: "DELETE",
+      const url = new URL("/api/digapi", window.location.origin);
+      url.searchParams.append('id', String(goalToDelete.id));
+      await fetch(url.toString(), {
+        method: 'DELETE',
       });
   
       // データを再取得
-      fetch("/api/goals")
+      fetch("/api/digapi")
         .then((res) => res.json())
         .then((data) => setGoals(data));
   
       setDeleteDialogIsOpen(false);
       setGoalToDelete(null);
-    };*/
+    };
 
   const openDeleteDialog = (goal: Goal) => {
     setGoalToDelete(goal);
@@ -219,13 +220,7 @@ export default function Dig() {
             </Button>
             <Button
               variant="destructive"
-              onClick={() => {
-                if (goalToDelete) {
-                  deleteGoal(goalToDelete.id);
-                }
-                setDeleteDialogIsOpen(false);
-                setGoalToDelete(null);
-              }}
+              onClick={handleDelete}
             >
               削除
             </Button>
